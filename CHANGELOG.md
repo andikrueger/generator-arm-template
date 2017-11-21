@@ -2,10 +2,12 @@
 
 ## Unreleased
 
-* Added resources
-  * Logic app
 * Fixed missing dependency on "yeoman-generator"
-`
+* Added resources:
+  * apphostingplan
+  * webapp
+  * logicapp
+
 ## v0.1.2
 
 * Initial release, including template for
