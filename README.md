@@ -37,6 +37,9 @@ so be sure to call that first.
 * vm
 * vm-customscript
 * vm-dscextension
+* apphostingplan
+* webapp
+* logicapp
 
 To call a sub-generator use the following syntax (this example will create a
 storage account, just swap in the sub-generator you wish to use from the
