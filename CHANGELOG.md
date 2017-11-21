@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Fixed missing dependency on "yeoman-generator"
+
 ## v0.1.2
 
 * Initial release, including template for
