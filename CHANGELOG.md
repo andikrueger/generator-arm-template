@@ -3,6 +3,9 @@
 ## Unreleased
 
 * Fixed missing dependency on "yeoman-generator"
+* Added resources:
+  * apphostingplan
+  * webapp
 
 ## v0.1.2
 
