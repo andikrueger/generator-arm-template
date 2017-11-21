@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Added resources
+  * Logic app
+
 ## v0.1.2
 
 * Initial release, including template for
