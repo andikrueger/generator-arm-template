@@ -6,6 +6,7 @@
 * Added resources:
   * apphostingplan
   * webapp
+  * sqlserver
 
 ## v0.1.2
 
