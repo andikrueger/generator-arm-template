@@ -7,6 +7,8 @@
   * apphostingplan
   * webapp
   * logicapp
+  * sqlserver
+  * sqldatabase
 
 ## v0.1.2
 
