@@ -15,7 +15,7 @@ describe('generator-arm-template:sqlserver', () => {
     );
   });
 
-  it('contains a storage account', () => {
+  it('contains a sql server', () => {
     var template = {
       $schema:
         'https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#',

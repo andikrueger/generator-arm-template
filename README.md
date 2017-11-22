@@ -38,6 +38,7 @@ so be sure to call that first.
 * vm-customscript
 * vm-dscextension
 * sqlserver
+* sqldatabase
 
 To call a sub-generator use the following syntax (this example will create a
 storage account, just swap in the sub-generator you wish to use from the
