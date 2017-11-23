@@ -12,14 +12,6 @@
     {
       "type": "PowerShell",
       "request": "launch",
-      "name": "Deploy to Azure (with upload of artifacts)",
-      "script": "${workspaceRoot}/Deploy-AzureResourceGroup.ps1",
-      "args": ["-UploadArtifacts"],
-      "cwd": "${file}"
-    },
-    {
-      "type": "PowerShell",
-      "request": "launch",
       "name": "Validate template",
       "script": "${workspaceRoot}/Deploy-AzureResourceGroup.ps1",
       "args": ["-ValidateOnly"],
