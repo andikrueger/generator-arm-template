@@ -208,6 +208,7 @@ module.exports = class extends Generator {
     }
 
     newResource.properties.maxSizeBytes = this._getSizeInBytes(dbSize);
+    newResource = this._addDependencies(template, newResource, properties);
     template.resources.push(newResource);
     return template;
   }
@@ -251,5 +252,24 @@ module.exports = class extends Generator {
       default:
         throw new Error('Unknown storage ammount "' + size + '"');
     }
+  }
+
+  _addDependencies(template, resource, properties) {
+    var serverName = properties.serverName;
+    var foundResource = false;
+    for (var i = 0; i < template.resources.length; i++) {
+      var resourceToCheck = template.resources[i];
+      if (
+        resourceToCheck.name === serverName &&
+        resourceToCheck.type === 'Microsoft.Sql/servers'
+      ) {
+        foundResource = true;
+        break;
+      }
+    }
+    if (foundResource === true) {
+      resource.dependsOn.push('Microsoft.Sql/servers/' + serverName);
+    }
+    return resource;
   }
 };
