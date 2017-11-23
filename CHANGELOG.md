@@ -6,6 +6,7 @@
 * Added resources:
   * apphostingplan
   * webapp
+  * logicapp
   * sqlserver
   * sqldatabase
 * Automatically update dependsOn attribute when resources that are added depend

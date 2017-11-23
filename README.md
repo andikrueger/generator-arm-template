@@ -37,6 +37,9 @@ so be sure to call that first.
 * vm
 * vm-customscript
 * vm-dscextension
+* apphostingplan
+* webapp
+* logicapp
 * sqlserver
 * sqldatabase
 
