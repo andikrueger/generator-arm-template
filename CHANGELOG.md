@@ -10,6 +10,7 @@
   * sqldatabase
 * Automatically update dependsOn attribute when resources that are added depend
   on other resources that exist in the same template
+* Removed unnecessary code from main deployment script
 
 ## v0.1.2
 
