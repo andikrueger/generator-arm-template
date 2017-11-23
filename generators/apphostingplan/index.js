@@ -24,14 +24,20 @@ module.exports = class extends Generator {
         chalk.blue('   AAAAAAAAAA                 AAAAAAAAAAAAAAAA    \n') +
         chalk.blue('                  AAAAAAAAAAAAAAAAAAAAAAAAAAAAA   \n') +
         chalk.blue('               AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA   \n') +
-        '\n\nWelcome to the Azure ARM Template project generator for custom script VM Extension!\n'
+        '\n\nWelcome to the Azure ARM Template project generator for web app hosting plan!\n'
     );
 
     const prompts = [
       {
         type: 'input',
-        name: 'vmName',
-        message: 'What is the name of the VM?'
+        name: 'name',
+        message: 'What is the name of the hosting plan?',
+        validate: function(input) {
+          if (input !== '') {
+            return true;
+          }
+          return false;
+        }
       },
       {
         type: 'input',
@@ -40,19 +46,21 @@ module.exports = class extends Generator {
         default: '[resourceGroup().location]'
       },
       {
-        type: 'input',
-        name: 'scriptUrl',
-        message: 'What is the URL of the script to download and run?'
+        type: 'list',
+        name: 'tier',
+        message: 'What tier will this plan run?',
+        choices: ['Premium', 'Standard', 'Basic', 'Shared', 'Free']
       },
       {
-        type: 'input',
-        name: 'storageAccountKey',
-        message: 'What is the key for this storage account?',
+        type: 'list',
+        name: 'tierSize',
+        message: 'What size tier should be used?',
+        choices: ['1', '2', '3'],
         when: function(answers) {
-          if (answers.scriptUrl.includes('.blob.core.windows.net')) {
-            return true;
+          if (answers.tier === 'Free' || answers.tier === 'Shared') {
+            return false;
           }
-          return false;
+          return true;
         }
       }
     ];
@@ -71,63 +79,62 @@ module.exports = class extends Generator {
   }
 
   _addResource(template, properties) {
-    var urlParts = properties.scriptUrl.split('/');
-    var scriptName = urlParts[urlParts.length - 1];
     var newResource = {
-      apiVersion: '2015-06-15',
-      type: 'Microsoft.Compute/virtualMachines/extensions',
-      name: properties.vmName + '/CustomScript1',
+      type: 'Microsoft.Web/serverfarms',
+      sku: {
+        tier: properties.tier
+      },
+      kind: 'app',
+      name: properties.name,
+      apiVersion: '2016-09-01',
       location: properties.location,
-      dependsOn: [
-        "[resourceId('Microsoft.Compute/virtualMachines', '" + properties.vmName + "')]"
-      ],
+      scale: null,
       properties: {
-        publisher: 'Microsoft.Compute',
-        type: 'CustomScriptExtension',
-        typeHandlerVersion: '1.8',
-        autoUpgradeMinorVersion: true,
-        settings: {
-          fileUris: [properties.scriptUrl]
-        },
-        protectedSettings: {
-          commandToExecute: 'powershell -ExecutionPolicy Unrestricted -File ' + scriptName
-        }
-      }
+        name: properties.name,
+        perSiteScaling: false,
+        reserved: false,
+        targetWorkerCount: 0,
+        targetWorkerSizeId: 0
+      },
+      dependsOn: []
     };
 
-    if (properties.scriptUrl.includes('.blob.core.windows.net')) {
-      newResource.properties.protectedSettings.storageAccountName = urlParts[2].substring(
-        0,
-        urlParts[2].indexOf('.')
-      );
-      newResource.properties.protectedSettings.storageAccountKey =
-        properties.storageAccountKey;
+    switch (properties.tier) {
+      case 'Premium':
+        newResource.sku.name = 'P' + properties.tierSize;
+        newResource.sku.size = 'P' + properties.tierSize;
+        newResource.sku.family = 'P';
+        newResource.sku.capacity = 1;
+        break;
+      case 'Standard':
+        newResource.sku.name = 'S' + properties.tierSize;
+        newResource.sku.size = 'S' + properties.tierSize;
+        newResource.sku.family = 'S';
+        newResource.sku.capacity = 1;
+        break;
+      case 'Basic':
+        newResource.sku.name = 'B' + properties.tierSize;
+        newResource.sku.size = 'B' + properties.tierSize;
+        newResource.sku.family = 'B';
+        newResource.sku.capacity = 1;
+        break;
+      case 'Shared':
+        newResource.sku.name = 'D1';
+        newResource.sku.size = 'D1';
+        newResource.sku.family = 'D';
+        newResource.sku.capacity = 0;
+        break;
+      case 'Free':
+        newResource.sku.name = 'F1';
+        newResource.sku.size = 'F1';
+        newResource.sku.family = 'F';
+        newResource.sku.capacity = 0;
+        break;
+      default:
+        throw new Error('Unknown tier "' + properties.tier + '"');
     }
 
-    newResource = this._addDependencies(template, newResource, properties);
     template.resources.push(newResource);
     return template;
-  }
-
-  _addDependencies(template, resource, properties) {
-    var vmName = properties.vmName;
-    var foundResource = false;
-    for (var i = 0; i < template.resources.length; i++) {
-      var networkResource = template.resources[i];
-      if (
-        networkResource.name === vmName &&
-        networkResource.type === 'Microsoft.Compute/virtualMachines'
-      ) {
-        foundResource = true;
-        break;
-      }
-    }
-    if (foundResource === true) {
-      resource.dependsOn.push(
-        "[resourceId('Microsoft.Compute/virtualMachines', '" + vmName + "')]"
-      );
-    }
-
-    return resource;
   }
 };

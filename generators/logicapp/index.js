@@ -24,36 +24,26 @@ module.exports = class extends Generator {
         chalk.blue('   AAAAAAAAAA                 AAAAAAAAAAAAAAAA    \n') +
         chalk.blue('                  AAAAAAAAAAAAAAAAAAAAAAAAAAAAA   \n') +
         chalk.blue('               AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA   \n') +
-        '\n\nWelcome to the Azure ARM Template project generator for custom script VM Extension!\n'
+        '\n\nWelcome to the Azure ARM Template project generator for logic apps!\n'
     );
 
     const prompts = [
       {
         type: 'input',
-        name: 'vmName',
-        message: 'What is the name of the VM?'
+        name: 'name',
+        message: 'What is the name of the logic app?',
+        validate: function(input) {
+          if (input !== '') {
+            return true;
+          }
+          return false;
+        }
       },
       {
         type: 'input',
         name: 'location',
         message: 'Where should the resource be created?',
         default: '[resourceGroup().location]'
-      },
-      {
-        type: 'input',
-        name: 'scriptUrl',
-        message: 'What is the URL of the script to download and run?'
-      },
-      {
-        type: 'input',
-        name: 'storageAccountKey',
-        message: 'What is the key for this storage account?',
-        when: function(answers) {
-          if (answers.scriptUrl.includes('.blob.core.windows.net')) {
-            return true;
-          }
-          return false;
-        }
       }
     ];
 
@@ -71,63 +61,27 @@ module.exports = class extends Generator {
   }
 
   _addResource(template, properties) {
-    var urlParts = properties.scriptUrl.split('/');
-    var scriptName = urlParts[urlParts.length - 1];
     var newResource = {
-      apiVersion: '2015-06-15',
-      type: 'Microsoft.Compute/virtualMachines/extensions',
-      name: properties.vmName + '/CustomScript1',
+      apiVersion: '2016-06-01',
+      name: properties.name,
+      type: 'Microsoft.Logic/workflows',
       location: properties.location,
-      dependsOn: [
-        "[resourceId('Microsoft.Compute/virtualMachines', '" + properties.vmName + "')]"
-      ],
       properties: {
-        publisher: 'Microsoft.Compute',
-        type: 'CustomScriptExtension',
-        typeHandlerVersion: '1.8',
-        autoUpgradeMinorVersion: true,
-        settings: {
-          fileUris: [properties.scriptUrl]
+        definition: {
+          contentVersion: '1.0.0.0',
+          parameters: {},
+          actions: {},
+          triggers: {},
+          outputs: {},
+          $schema:
+            'https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#'
         },
-        protectedSettings: {
-          commandToExecute: 'powershell -ExecutionPolicy Unrestricted -File ' + scriptName
-        }
-      }
+        parameters: {},
+        state: 'Enabled'
+      },
+      dependsOn: []
     };
-
-    if (properties.scriptUrl.includes('.blob.core.windows.net')) {
-      newResource.properties.protectedSettings.storageAccountName = urlParts[2].substring(
-        0,
-        urlParts[2].indexOf('.')
-      );
-      newResource.properties.protectedSettings.storageAccountKey =
-        properties.storageAccountKey;
-    }
-
-    newResource = this._addDependencies(template, newResource, properties);
     template.resources.push(newResource);
     return template;
-  }
-
-  _addDependencies(template, resource, properties) {
-    var vmName = properties.vmName;
-    var foundResource = false;
-    for (var i = 0; i < template.resources.length; i++) {
-      var networkResource = template.resources[i];
-      if (
-        networkResource.name === vmName &&
-        networkResource.type === 'Microsoft.Compute/virtualMachines'
-      ) {
-        foundResource = true;
-        break;
-      }
-    }
-    if (foundResource === true) {
-      resource.dependsOn.push(
-        "[resourceId('Microsoft.Compute/virtualMachines', '" + vmName + "')]"
-      );
-    }
-
-    return resource;
   }
 };

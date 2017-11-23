@@ -24,14 +24,20 @@ module.exports = class extends Generator {
         chalk.blue('   AAAAAAAAAA                 AAAAAAAAAAAAAAAA    \n') +
         chalk.blue('                  AAAAAAAAAAAAAAAAAAAAAAAAAAAAA   \n') +
         chalk.blue('               AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA   \n') +
-        '\n\nWelcome to the Azure ARM Template project generator for custom script VM Extension!\n'
+        '\n\nWelcome to the Azure ARM Template project generator for SQL Server (logical server)!\n'
     );
 
     const prompts = [
       {
         type: 'input',
-        name: 'vmName',
-        message: 'What is the name of the VM?'
+        name: 'name',
+        message: 'What is the name of the server?',
+        validate: function(input) {
+          if (input !== '') {
+            return true;
+          }
+          return false;
+        }
       },
       {
         type: 'input',
@@ -41,15 +47,21 @@ module.exports = class extends Generator {
       },
       {
         type: 'input',
-        name: 'scriptUrl',
-        message: 'What is the URL of the script to download and run?'
+        name: 'username',
+        message: 'What is the username for the admin account on the server?',
+        validate: function(input) {
+          if (input !== '') {
+            return true;
+          }
+          return false;
+        }
       },
       {
         type: 'input',
-        name: 'storageAccountKey',
-        message: 'What is the key for this storage account?',
-        when: function(answers) {
-          if (answers.scriptUrl.includes('.blob.core.windows.net')) {
+        name: 'password',
+        message: 'What is the password for the admin account on the server?',
+        validate: function(input) {
+          if (input !== '') {
             return true;
           }
           return false;
@@ -71,63 +83,31 @@ module.exports = class extends Generator {
   }
 
   _addResource(template, properties) {
-    var urlParts = properties.scriptUrl.split('/');
-    var scriptName = urlParts[urlParts.length - 1];
     var newResource = {
-      apiVersion: '2015-06-15',
-      type: 'Microsoft.Compute/virtualMachines/extensions',
-      name: properties.vmName + '/CustomScript1',
+      apiVersion: '2015-05-01-preview',
+      type: 'Microsoft.Sql/servers',
       location: properties.location,
-      dependsOn: [
-        "[resourceId('Microsoft.Compute/virtualMachines', '" + properties.vmName + "')]"
-      ],
+      name: properties.name,
       properties: {
-        publisher: 'Microsoft.Compute',
-        type: 'CustomScriptExtension',
-        typeHandlerVersion: '1.8',
-        autoUpgradeMinorVersion: true,
-        settings: {
-          fileUris: [properties.scriptUrl]
-        },
-        protectedSettings: {
-          commandToExecute: 'powershell -ExecutionPolicy Unrestricted -File ' + scriptName
+        administratorLogin: properties.username,
+        administratorLoginPassword: properties.password,
+        version: '12.0'
+      },
+      resources: [
+        {
+          apiVersion: '2014-04-01-preview',
+          dependsOn: ["[concat('Microsoft.Sql/servers/', '" + properties.name + "')]"],
+          location: properties.location,
+          name: 'AllowAllWindowsAzureIps',
+          properties: {
+            endIpAddress: '0.0.0.0',
+            startIpAddress: '0.0.0.0'
+          },
+          type: 'firewallrules'
         }
-      }
+      ]
     };
-
-    if (properties.scriptUrl.includes('.blob.core.windows.net')) {
-      newResource.properties.protectedSettings.storageAccountName = urlParts[2].substring(
-        0,
-        urlParts[2].indexOf('.')
-      );
-      newResource.properties.protectedSettings.storageAccountKey =
-        properties.storageAccountKey;
-    }
-
-    newResource = this._addDependencies(template, newResource, properties);
     template.resources.push(newResource);
     return template;
-  }
-
-  _addDependencies(template, resource, properties) {
-    var vmName = properties.vmName;
-    var foundResource = false;
-    for (var i = 0; i < template.resources.length; i++) {
-      var networkResource = template.resources[i];
-      if (
-        networkResource.name === vmName &&
-        networkResource.type === 'Microsoft.Compute/virtualMachines'
-      ) {
-        foundResource = true;
-        break;
-      }
-    }
-    if (foundResource === true) {
-      resource.dependsOn.push(
-        "[resourceId('Microsoft.Compute/virtualMachines', '" + vmName + "')]"
-      );
-    }
-
-    return resource;
   }
 };

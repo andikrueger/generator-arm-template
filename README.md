@@ -24,7 +24,7 @@ Then generate your new project:
 yo arm-template
 ```
 
-# Generator list
+## Generator list
 
 As well as the main generator, you can also use the following sub-generators. These
 are all designed to modify ARM template files that were created with the main generator
@@ -37,6 +37,11 @@ so be sure to call that first.
 * vm
 * vm-customscript
 * vm-dscextension
+* apphostingplan
+* webapp
+* logicapp
+* sqlserver
+* sqldatabase
 
 To call a sub-generator use the following syntax (this example will create a
 storage account, just swap in the sub-generator you wish to use from the
@@ -46,6 +51,9 @@ above list).
 yo arm-template:storageaccount
 ```
 
+## Change log
+
+For a full history of changes check out the [Change log](CHANGELOG.md)
 
 ## License
 
