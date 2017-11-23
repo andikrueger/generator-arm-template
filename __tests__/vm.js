@@ -42,4 +42,35 @@ describe('generator-arm-template:vm', () => {
     });
     assert.equal(template.resources[0].type, 'Microsoft.Compute/virtualMachines');
   });
+
+  it('creates a vm with a nic and storage dependency', () => {
+    template.resources.push({
+      name: 'testNic',
+      type: 'Microsoft.Network/networkInterfaces'
+    });
+    template.resources.push({
+      name: 'testStorage',
+      type: 'Microsoft.Storage/storageAccounts'
+    });
+    template = generator._addResource(template, {
+      name: 'testName',
+      location: 'testLocation',
+      username: 'admin',
+      password: 'password',
+      publisher: 'publisher',
+      offer: 'offer',
+      sku: 'sku',
+      version: 'latest',
+      storageAccount: 'testStorage',
+      nic: 'testNic'
+    });
+    assert.equal(
+      template.resources[2].dependsOn[0],
+      "[resourceId('Microsoft.Network/networkInterfaces', 'testNic')]"
+    );
+    assert.equal(
+      template.resources[2].dependsOn[1],
+      "[resourceId('Microsoft.Storage/storageAccounts', 'testStorage')]"
+    );
+  });
 });

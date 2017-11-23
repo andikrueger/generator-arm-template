@@ -75,4 +75,20 @@ describe('generator-arm-template:vm-customscript', () => {
       'testKey'
     );
   });
+
+  it('creates a custom script that has a dependency on a VM', () => {
+    template.resources.push({
+      name: 'testVM',
+      type: 'Microsoft.Compute/virtualMachines'
+    });
+    template = generator._addResource(template, {
+      vmName: 'testVM',
+      location: 'testLocation',
+      scriptUrl: 'http://someserver.fake/path/MyScript.ps1'
+    });
+    assert.equal(
+      template.resources[1].dependsOn[0],
+      "[resourceId('Microsoft.Compute/virtualMachines', 'testVM')]"
+    );
+  });
 });

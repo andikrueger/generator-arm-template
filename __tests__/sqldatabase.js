@@ -72,4 +72,26 @@ describe('generator-arm-template:sqldatabase', () => {
     assert.equal(template.resources[0].properties.edition, 'Premium');
     assert.equal(template.resources[0].properties.requestedServiceObjectiveName, 'P1');
   });
+
+  it('creates a dependency on the logical server when it is in the template', () => {
+    template.resources.push({
+      type: 'Microsoft.Sql/servers',
+      name: 'testServer'
+    });
+
+    template = generator._addResource(template, {
+      name: 'testName',
+      location: 'testLocation',
+      collation: 'SQL_Latin1_General_CP1_CI_AS',
+      serverName: 'testServer',
+      edition: 'Premium',
+      premiumTier: 'P1',
+      premiumStorage: '100MB'
+    });
+
+    assert.equal(
+      template.resources[1].dependsOn[0],
+      "[resourceId('Microsoft.Sql/servers', 'testServer')]"
+    );
+  });
 });
