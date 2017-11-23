@@ -157,7 +157,9 @@ module.exports = class extends Generator {
       }
     }
     if (foundResource === true) {
-      resource.dependsOn.push('Microsoft.Network/virtualNetworks/' + networkName);
+      resource.dependsOn.push(
+        "[resourceId('Microsoft.Network/virtualNetworks', '" + networkName + "')]"
+      );
     }
 
     var publicIpName = properties.publicIpName;
@@ -174,7 +176,9 @@ module.exports = class extends Generator {
         }
       }
       if (foundResource === true) {
-        resource.dependsOn.push('Microsoft.Network/publicIPAddresses/' + publicIpName);
+        resource.dependsOn.push(
+          "[resourceId('Microsoft.Network/publicIPAddresses', '" + publicIpName + "')]"
+        );
       }
     }
 

@@ -111,7 +111,7 @@ describe('generator-arm-template:networkinterface', () => {
     });
     assert.equal(
       template.resources[1].dependsOn[0],
-      'Microsoft.Network/virtualNetworks/testNetwork'
+      "[resourceId('Microsoft.Network/virtualNetworks', 'testNetwork')]"
     );
   });
 
@@ -134,11 +134,11 @@ describe('generator-arm-template:networkinterface', () => {
     });
     assert.equal(
       template.resources[2].dependsOn[0],
-      'Microsoft.Network/virtualNetworks/testNetwork'
+      "[resourceId('Microsoft.Network/virtualNetworks', 'testNetwork')]"
     );
     assert.equal(
       template.resources[2].dependsOn[1],
-      'Microsoft.Network/publicIPAddresses/testIP'
+      "[resourceId('Microsoft.Network/publicIPAddresses', 'testIP')]"
     );
   });
 });

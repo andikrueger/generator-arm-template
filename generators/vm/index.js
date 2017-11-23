@@ -205,7 +205,9 @@ module.exports = class extends Generator {
       }
     }
     if (foundResource === true) {
-      resource.dependsOn.push('Microsoft.Network/networkInterfaces/' + nicName);
+      resource.dependsOn.push(
+        "[resourceId('Microsoft.Network/networkInterfaces', '" + nicName + "')]"
+      );
     }
 
     var storageName = properties.storageAccount;
@@ -221,7 +223,9 @@ module.exports = class extends Generator {
       }
     }
     if (foundResource === true) {
-      resource.dependsOn.push('Microsoft.Storage/storageAccounts/' + storageName);
+      resource.dependsOn.push(
+        "[resourceId('Microsoft.Storage/storageAccounts', '" + storageName + "')]"
+      );
     }
 
     return resource;

@@ -89,6 +89,9 @@ describe('generator-arm-template:sqldatabase', () => {
       premiumStorage: '100MB'
     });
 
-    assert.equal(template.resources[1].dependsOn[0], 'Microsoft.Sql/servers/testServer');
+    assert.equal(
+      template.resources[1].dependsOn[0],
+      "[resourceId('Microsoft.Sql/servers', 'testServer')]"
+    );
   });
 });

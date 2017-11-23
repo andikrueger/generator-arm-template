@@ -66,11 +66,11 @@ describe('generator-arm-template:vm', () => {
     });
     assert.equal(
       template.resources[2].dependsOn[0],
-      'Microsoft.Network/networkInterfaces/testNic'
+      "[resourceId('Microsoft.Network/networkInterfaces', 'testNic')]"
     );
     assert.equal(
       template.resources[2].dependsOn[1],
-      'Microsoft.Storage/storageAccounts/testStorage'
+      "[resourceId('Microsoft.Storage/storageAccounts', 'testStorage')]"
     );
   });
 });

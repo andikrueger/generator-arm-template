@@ -70,7 +70,7 @@ module.exports = class extends Generator {
   }
 
   _addResource(template, properties) {
-    template.resources.push({
+    var newResource = {
       type: 'Microsoft.Compute/virtualMachines/extensions',
       name: properties.vmName + '/Microsoft.Powershell.DSC',
       apiVersion: '2015-05-01-preview',
@@ -93,7 +93,31 @@ module.exports = class extends Generator {
           Items: {}
         }
       }
-    });
+    };
+    newResource = this._addDependencies(template, newResource, properties);
+    template.resources.push(newResource);
     return template;
+  }
+
+  _addDependencies(template, resource, properties) {
+    var vmName = properties.vmName;
+    var foundResource = false;
+    for (var i = 0; i < template.resources.length; i++) {
+      var networkResource = template.resources[i];
+      if (
+        networkResource.name === vmName &&
+        networkResource.type === 'Microsoft.Compute/virtualMachines'
+      ) {
+        foundResource = true;
+        break;
+      }
+    }
+    if (foundResource === true) {
+      resource.dependsOn.push(
+        "[resourceId('Microsoft.Compute/virtualMachines', '" + vmName + "')]"
+      );
+    }
+
+    return resource;
   }
 };

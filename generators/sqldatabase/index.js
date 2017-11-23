@@ -268,7 +268,9 @@ module.exports = class extends Generator {
       }
     }
     if (foundResource === true) {
-      resource.dependsOn.push('Microsoft.Sql/servers/' + serverName);
+      resource.dependsOn.push(
+        "[resourceId('Microsoft.Sql/servers', '" + serverName + "')]"
+      );
     }
     return resource;
   }
