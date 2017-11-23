@@ -60,36 +60,52 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'collation',
         message: 'What collation should this database use?',
-        default: 'SQL_Latin1_General_CP1_CI_AS'
+        default: 'Latin1_General_CI_AS'
       },
       {
         type: 'list',
         name: 'edition',
         message: 'What plan should this database run at?',
-        choices: ['Basic', 'Standard', 'Premium']
+        choices: ['Basic (5 DTU)', 'Standard (10-100 DTU)', 'Premium (125-4000 DTU)'],
+        filter: function(val) {
+          return val.split(' ')[0];
+        }
       },
       {
         type: 'list',
         name: 'standardTier',
         message: 'What scale should this database run at?',
-        choices: ['S0', 'S1', 'S2', 'S3'],
+        choices: ['S0 (10 DTU)', 'S1 (20 DTU)', 'S2 (50 DTU)', 'S3 (100 DTU)'],
         when: function(answers) {
           if (answers.edition === 'Standard') {
             return true;
           }
           return false;
+        },
+        filter: function(val) {
+          return val.split(' ')[0];
         }
       },
       {
         type: 'list',
         name: 'premiumTier',
         message: 'What scale should this database run at?',
-        choices: ['P1', 'P2', 'P4', 'P6', 'P11', 'P15'],
+        choices: [
+          'P1 (125 DTU)',
+          'P2 (250 DTU)',
+          'P4 (500 DTU)',
+          'P6 (1000 DTU)',
+          'P11 (1750 DTU)',
+          'P15 (4000 DTU)'
+        ],
         when: function(answers) {
           if (answers.edition === 'Premium') {
             return true;
           }
           return false;
+        },
+        filter: function(val) {
+          return val.split(' ')[0];
         }
       },
       {
