@@ -1,6 +1,6 @@
 # Change log
 
-## Unreleased
+## 0.2.0
 
 * Fixed missing dependency on "yeoman-generator"
 * Added resources:
