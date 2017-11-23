@@ -138,7 +138,46 @@ module.exports = class extends Generator {
           "')]"
       };
     }
+    newResource = this._addDependencies(template, newResource, properties);
     template.resources.push(newResource);
     return template;
+  }
+
+  _addDependencies(template, resource, properties) {
+    var networkName = properties.networkName;
+    var foundResource = false;
+    for (var i = 0; i < template.resources.length; i++) {
+      var networkResource = template.resources[i];
+      if (
+        networkResource.name === networkName &&
+        networkResource.type === 'Microsoft.Network/virtualNetworks'
+      ) {
+        foundResource = true;
+        break;
+      }
+    }
+    if (foundResource === true) {
+      resource.dependsOn.push('Microsoft.Network/virtualNetworks/' + networkName);
+    }
+
+    var publicIpName = properties.publicIpName;
+    if (publicIpName !== '') {
+      foundResource = false;
+      for (var j = 0; j < template.resources.length; j++) {
+        var ipResource = template.resources[j];
+        if (
+          ipResource.name === publicIpName &&
+          ipResource.type === 'Microsoft.Network/publicIPAddresses'
+        ) {
+          foundResource = true;
+          break;
+        }
+      }
+      if (foundResource === true) {
+        resource.dependsOn.push('Microsoft.Network/publicIPAddresses/' + publicIpName);
+      }
+    }
+
+    return resource;
   }
 };

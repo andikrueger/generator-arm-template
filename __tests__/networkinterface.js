@@ -95,4 +95,51 @@ describe('generator-arm-template:networkinterface', () => {
       "[resourceId('Microsoft.Network/publicIPAddresses', 'TestPublicIP')]"
     );
   });
+
+  it('creates a network adapter with a dependency on a network', () => {
+    template.resources.push({
+      name: 'testNetwork',
+      type: 'Microsoft.Network/virtualNetworks'
+    });
+    template = generator._addResource(template, {
+      name: 'testName',
+      location: 'testLocation',
+      networkName: 'testNetwork',
+      subnetName: 'test',
+      publicIpName: '',
+      privateIpAddress: ''
+    });
+    assert.equal(
+      template.resources[1].dependsOn[0],
+      'Microsoft.Network/virtualNetworks/testNetwork'
+    );
+  });
+
+  it('creates a network adapter with a dependency on a network and public IP', () => {
+    template.resources.push({
+      name: 'testNetwork',
+      type: 'Microsoft.Network/virtualNetworks'
+    });
+    template.resources.push({
+      name: 'testIP',
+      type: 'Microsoft.Network/publicIPAddresses'
+    });
+    template = generator._addResource(template, {
+      name: 'testName',
+      location: 'testLocation',
+      networkName: 'testNetwork',
+      subnetName: 'test',
+      publicIpName: 'testIP',
+      privateIpAddress: ''
+    });
+    assert.equal(
+      template.resources[2].dependsOn[0],
+      'Microsoft.Network/virtualNetworks/testNetwork'
+    );
+    console.log(template.resources[2].dependsOn);
+    assert.equal(
+      template.resources[2].dependsOn[1],
+      'Microsoft.Network/publicIPAddresses/testIP'
+    );
+  });
 });
