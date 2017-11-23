@@ -134,7 +134,7 @@ module.exports = class extends Generator {
   }
 
   _addResource(template, properties) {
-    template.resources.push({
+    var newResource = {
       apiVersion: '2015-05-01-preview',
       type: 'Microsoft.Compute/virtualMachines',
       name: properties.name,
@@ -185,7 +185,45 @@ module.exports = class extends Generator {
           ]
         }
       }
-    });
+    };
+    newResource = this._addDependencies(template, newResource, properties);
+    template.resources.push(newResource);
     return template;
+  }
+
+  _addDependencies(template, resource, properties) {
+    var nicName = properties.nic;
+    var foundResource = false;
+    for (var i = 0; i < template.resources.length; i++) {
+      var networkResource = template.resources[i];
+      if (
+        networkResource.name === nicName &&
+        networkResource.type === 'Microsoft.Network/networkInterfaces'
+      ) {
+        foundResource = true;
+        break;
+      }
+    }
+    if (foundResource === true) {
+      resource.dependsOn.push('Microsoft.Network/networkInterfaces/' + nicName);
+    }
+
+    var storageName = properties.storageAccount;
+    foundResource = false;
+    for (var j = 0; j < template.resources.length; j++) {
+      var storageResource = template.resources[j];
+      if (
+        storageResource.name === storageName &&
+        storageResource.type === 'Microsoft.Storage/storageAccounts'
+      ) {
+        foundResource = true;
+        break;
+      }
+    }
+    if (foundResource === true) {
+      resource.dependsOn.push('Microsoft.Storage/storageAccounts/' + storageName);
+    }
+
+    return resource;
   }
 };

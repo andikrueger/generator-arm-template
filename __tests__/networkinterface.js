@@ -136,7 +136,6 @@ describe('generator-arm-template:networkinterface', () => {
       template.resources[2].dependsOn[0],
       'Microsoft.Network/virtualNetworks/testNetwork'
     );
-    console.log(template.resources[2].dependsOn);
     assert.equal(
       template.resources[2].dependsOn[1],
       'Microsoft.Network/publicIPAddresses/testIP'
