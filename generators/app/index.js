@@ -41,108 +41,108 @@ module.exports = class extends Generator {
         store: true,
         choices: [
           {
-            value: 'eastasia',
-            name: 'East Asia'
+            name: 'Australia East',
+            value: 'australiaeast'
           },
           {
-            value: 'southeastasia',
-            name: 'Southeast Asia'
+            name: 'Australia Southeast',
+            value: 'australiasoutheast'
           },
           {
-            value: 'centralus',
-            name: 'Central US'
+            name: 'Brazil South',
+            value: 'brazilsouth'
           },
           {
-            value: 'eastus',
-            name: 'East US'
+            name: 'Canada Central',
+            value: 'canadacentral'
           },
           {
-            value: 'eastus2',
-            name: 'East US 2'
+            name: 'Canada East',
+            value: 'canadaeast'
           },
           {
-            value: 'westus',
-            name: 'West US'
+            name: 'Central India',
+            value: 'centralindia'
           },
           {
-            value: 'northcentralus',
-            name: 'North Central US'
+            name: 'Central US',
+            value: 'centralus'
           },
           {
-            value: 'southcentralus',
-            name: 'South Central US'
+            name: 'East Asia',
+            value: 'eastasia'
           },
           {
-            value: 'northeurope',
-            name: 'North Europe'
+            name: 'East US',
+            value: 'eastus'
           },
           {
-            value: 'westeurope',
-            name: 'West Europe'
+            name: 'East US 2',
+            value: 'eastus2'
           },
           {
-            value: 'japanwest',
-            name: 'Japan West'
+            name: 'Japan East',
+            value: 'japaneast'
           },
           {
-            value: 'japaneast',
-            name: 'Japan East'
+            name: 'Japan West',
+            value: 'japanwest'
           },
           {
-            value: 'brazilsouth',
-            name: 'Brazil South'
+            name: 'Korea Central',
+            value: 'koreacentral'
           },
           {
-            value: 'australiaeast',
-            name: 'Australia East'
+            name: 'Korea South',
+            value: 'koreasouth'
           },
           {
-            value: 'australiasoutheast',
-            name: 'Australia Southeast'
+            name: 'North Central US',
+            value: 'northcentralus'
           },
           {
-            value: 'southindia',
-            name: 'South India'
+            name: 'North Europe',
+            value: 'northeurope'
           },
           {
-            value: 'centralindia',
-            name: 'Central India'
+            name: 'South Central US',
+            value: 'southcentralus'
           },
           {
-            value: 'westindia',
-            name: 'West India'
+            name: 'South India',
+            value: 'southindia'
           },
           {
-            value: 'canadacentral',
-            name: 'Canada Central'
+            name: 'Southeast Asia',
+            value: 'southeastasia'
           },
           {
-            value: 'canadaeast',
-            name: 'Canada East'
+            name: 'UK South',
+            value: 'uksouth'
           },
           {
-            value: 'uksouth',
-            name: 'UK South'
+            name: 'UK West',
+            value: 'ukwest'
           },
           {
-            value: 'ukwest',
-            name: 'UK West'
+            name: 'West Central US',
+            value: 'westcentralus'
           },
           {
-            value: 'westcentralus',
-            name: 'West Central US'
+            name: 'West Europe',
+            value: 'westeurope'
           },
           {
-            value: 'westus2',
-            name: 'West US 2'
+            name: 'West India',
+            value: 'westindia'
           },
           {
-            value: 'koreacentral',
-            name: 'Korea Central'
+            name: 'West US',
+            value: 'westus'
           },
           {
-            value: 'koreasouth',
-            name: 'Korea South'
+            name: 'West US 2',
+            value: 'westus2'
           }
         ]
       }
