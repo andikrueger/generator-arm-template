@@ -13,6 +13,7 @@
   "main": "generators/index.js",
   "keywords": ["ARM", "Azure", "Resource Manager", "yeoman-generator"],
   "devDependencies": {
+    "azure-naming-conventions": "^0.1.1",
     "eslint": "^4.1.0",
     "eslint-config-prettier": "^2.4.0",
     "eslint-config-xo": "^0.18.2",
