@@ -1,4 +1,5 @@
 'use strict';
+const AzureNamingConvention = require('azure-naming-conventions');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 
@@ -26,15 +27,29 @@ module.exports = class extends Generator {
         chalk.blue('               AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA   \n') +
         '\n\nWelcome to the Azure ARM Template project generator for virtual machines!\n'
     );
-
+    var currentGenerator = this;
     const prompts = [
       {
         type: 'input',
         name: 'name',
         message: 'What is the name of the VM?',
         validate: function(input) {
-          if (input !== '') {
+          var naming = new AzureNamingConvention.NamingConvention(
+            input,
+            AzureNamingConvention.NamingConventionRule.VirtualMachineWindows
+          );
+          var namingResult = naming.validate();
+          if (input !== '' && namingResult.isValid) {
             return true;
+          }
+          if (input === '') {
+            currentGenerator.log('\n Please enter a valid string.');
+          }
+          if (!namingResult.isValid) {
+            currentGenerator.log(
+              '\n Please make sure to fulfill the following Azure Naming Convention Rules: ' +
+                namingResult.toString()
+            );
           }
           return false;
         }
@@ -101,8 +116,22 @@ module.exports = class extends Generator {
         name: 'storageAccount',
         message: 'What storage account should be used for the default disk?',
         validate: function(input) {
-          if (input !== '') {
+          var naming = new AzureNamingConvention.NamingConvention(
+            input,
+            AzureNamingConvention.NamingConventionRule.StorageAccountNameDisks
+          );
+          var namingResult = naming.validate();
+          if (input !== '' && namingResult.isValid) {
             return true;
+          }
+          if (input === '') {
+            currentGenerator.log('\n Please enter a valid string.');
+          }
+          if (!namingResult.isValid) {
+            currentGenerator.log(
+              '\n Please make sure to fulfill the following Azure Naming Convention Rules: ' +
+                namingResult.toString()
+            );
           }
           return false;
         }
@@ -112,8 +141,22 @@ module.exports = class extends Generator {
         name: 'nic',
         message: 'What is the name of the NIC that should be used?',
         validate: function(input) {
-          if (input !== '') {
+          var naming = new AzureNamingConvention.NamingConvention(
+            input,
+            AzureNamingConvention.NamingConventionRule.NetworkInterface
+          );
+          var namingResult = naming.validate();
+          if (input !== '' && namingResult.isValid) {
             return true;
+          }
+          if (input === '') {
+            currentGenerator.log('\n Please enter a valid string.');
+          }
+          if (!namingResult.isValid) {
+            currentGenerator.log(
+              '\n Please make sure to fulfill the following Azure Naming Convention Rules: ' +
+                namingResult.toString()
+            );
           }
           return false;
         }
