@@ -1,5 +1,5 @@
 'use strict';
-const AzureNamingConvention = require('azure-naming-conventions');
+const AzureNamingConventions = require('azure-naming-conventions');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 
@@ -34,9 +34,9 @@ module.exports = class extends Generator {
         name: 'name',
         message: 'What is the name of the VM?',
         validate: function(input) {
-          var naming = new AzureNamingConvention.NamingConvention(
+          var naming = new AzureNamingConventions.NamingConvention(
             input,
-            AzureNamingConvention.NamingConventionRule.VirtualMachineWindows
+            AzureNamingConventions.NamingConventionRule.VirtualMachineWindows
           );
           var namingResult = naming.validate();
           if (input !== '' && namingResult.isValid) {
@@ -116,9 +116,9 @@ module.exports = class extends Generator {
         name: 'storageAccount',
         message: 'What storage account should be used for the default disk?',
         validate: function(input) {
-          var naming = new AzureNamingConvention.NamingConvention(
+          var naming = new AzureNamingConventions.NamingConvention(
             input,
-            AzureNamingConvention.NamingConventionRule.StorageAccountNameDisks
+            AzureNamingConventions.NamingConventionRule.StorageAccountNameDisks
           );
           var namingResult = naming.validate();
           if (input !== '' && namingResult.isValid) {
@@ -141,9 +141,9 @@ module.exports = class extends Generator {
         name: 'nic',
         message: 'What is the name of the NIC that should be used?',
         validate: function(input) {
-          var naming = new AzureNamingConvention.NamingConvention(
+          var naming = new AzureNamingConventions.NamingConvention(
             input,
-            AzureNamingConvention.NamingConventionRule.NetworkInterface
+            AzureNamingConventions.NamingConventionRule.NetworkInterface
           );
           var namingResult = naming.validate();
           if (input !== '' && namingResult.isValid) {
