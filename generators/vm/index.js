@@ -27,6 +27,7 @@ module.exports = class extends Generator {
         chalk.blue('               AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA   \n') +
         '\n\nWelcome to the Azure ARM Template project generator for virtual machines!\n'
     );
+
     var currentGenerator = this;
     const prompts = [
       {

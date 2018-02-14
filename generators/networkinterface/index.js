@@ -1,4 +1,5 @@
 'use strict';
+const AzureNamingConventions = require('azure-naming-conventions');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 
@@ -27,14 +28,29 @@ module.exports = class extends Generator {
         '\n\nWelcome to the Azure ARM Template project generator for Network interfaces!\n'
     );
 
+    var currentGenerator = this;
     const prompts = [
       {
         type: 'input',
         name: 'name',
         message: 'What is the name of the network interface?',
         validate: function(input) {
-          if (input !== '') {
+          var naming = new AzureNamingConventions.NamingConvention(
+            input,
+            AzureNamingConventions.NamingConventionRule.NetworkInterface
+          );
+          var namingResult = naming.validate();
+          if (input !== '' && namingResult.isValid) {
             return true;
+          }
+          if (input === '') {
+            currentGenerator.log('\n Please enter a valid string.');
+          }
+          if (!namingResult.isValid) {
+            currentGenerator.log(
+              '\n Please make sure to fulfill the following Azure Naming Convention Rules: ' +
+                namingResult.toString()
+            );
           }
           return false;
         }
@@ -49,7 +65,27 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'publicIpName',
         message:
-          'What is the name of the public IP address resource to associate to this NIC? (blank for none)'
+          'What is the name of the public IP address resource to associate to this NIC? (blank for none)',
+        validate: function(input) {
+          var naming = new AzureNamingConventions.NamingConvention(
+            input,
+            AzureNamingConventions.NamingConventionRule.PublicIPAddress
+          );
+          var namingResult = naming.validate();
+          if (input !== '' && namingResult.isValid) {
+            return true;
+          }
+          if (input === '') {
+            currentGenerator.log('\n Please enter a valid string.');
+          }
+          if (!namingResult.isValid) {
+            currentGenerator.log(
+              '\n Please make sure to fulfill the following Azure Naming Convention Rules: ' +
+                namingResult.toString()
+            );
+          }
+          return false;
+        }
       },
       {
         type: 'input',
@@ -57,8 +93,22 @@ module.exports = class extends Generator {
         message:
           'What is the name of the virtual network address to assoicate to this NIC?',
         validate: function(input) {
-          if (input !== '') {
+          var naming = new AzureNamingConventions.NamingConvention(
+            input,
+            AzureNamingConventions.NamingConventionRule.VirtualNetworkVNet
+          );
+          var namingResult = naming.validate();
+          if (input !== '' && namingResult.isValid) {
             return true;
+          }
+          if (input === '') {
+            currentGenerator.log('\n Please enter a valid string.');
+          }
+          if (!namingResult.isValid) {
+            currentGenerator.log(
+              '\n Please make sure to fulfill the following Azure Naming Convention Rules: ' +
+                namingResult.toString()
+            );
           }
           return false;
         }
@@ -69,8 +119,22 @@ module.exports = class extends Generator {
         message:
           'What is the name of the subnet in the virtual network to put this NIC in to?',
         validate: function(input) {
-          if (input !== '') {
+          var naming = new AzureNamingConventions.NamingConvention(
+            input,
+            AzureNamingConventions.NamingConventionRule.Subnet
+          );
+          var namingResult = naming.validate();
+          if (input !== '' && namingResult.isValid) {
             return true;
+          }
+          if (input === '') {
+            currentGenerator.log('\n Please enter a valid string.');
+          }
+          if (!namingResult.isValid) {
+            currentGenerator.log(
+              '\n Please make sure to fulfill the following Azure Naming Convention Rules: ' +
+                namingResult.toString()
+            );
           }
           return false;
         }

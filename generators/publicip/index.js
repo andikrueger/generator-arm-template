@@ -1,4 +1,5 @@
 'use strict';
+const AzureNamingConventions = require('azure-naming-conventions');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 
@@ -27,14 +28,29 @@ module.exports = class extends Generator {
         '\n\nWelcome to the Azure ARM Template project generator for public IP addresses!\n'
     );
 
+    var currentGenerator = this;
     const prompts = [
       {
         type: 'input',
         name: 'name',
         message: 'What is the name of the public IP?',
         validate: function(input) {
-          if (input !== '') {
+          var naming = new AzureNamingConventions.NamingConvention(
+            input,
+            AzureNamingConventions.NamingConventionRule.PublicIPAddress
+          );
+          var namingResult = naming.validate();
+          if (input !== '' && namingResult.isValid) {
             return true;
+          }
+          if (input === '') {
+            currentGenerator.log('\n Please enter a valid string.');
+          }
+          if (!namingResult.isValid) {
+            currentGenerator.log(
+              '\n Please make sure to fulfill the following Azure Naming Convention Rules: ' +
+                namingResult.toString()
+            );
           }
           return false;
         }
