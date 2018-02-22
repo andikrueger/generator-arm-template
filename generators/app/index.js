@@ -35,10 +35,116 @@ module.exports = class extends Generator {
         store: true
       },
       {
-        type: 'input',
+        type: 'list',
         name: 'region',
         message: 'What Azure region would you like to deploy to?',
-        store: true
+        store: true,
+        choices: [
+          {
+            name: 'Australia East',
+            value: 'australiaeast'
+          },
+          {
+            name: 'Australia Southeast',
+            value: 'australiasoutheast'
+          },
+          {
+            name: 'Brazil South',
+            value: 'brazilsouth'
+          },
+          {
+            name: 'Canada Central',
+            value: 'canadacentral'
+          },
+          {
+            name: 'Canada East',
+            value: 'canadaeast'
+          },
+          {
+            name: 'Central India',
+            value: 'centralindia'
+          },
+          {
+            name: 'Central US',
+            value: 'centralus'
+          },
+          {
+            name: 'East Asia',
+            value: 'eastasia'
+          },
+          {
+            name: 'East US',
+            value: 'eastus'
+          },
+          {
+            name: 'East US 2',
+            value: 'eastus2'
+          },
+          {
+            name: 'Japan East',
+            value: 'japaneast'
+          },
+          {
+            name: 'Japan West',
+            value: 'japanwest'
+          },
+          {
+            name: 'Korea Central',
+            value: 'koreacentral'
+          },
+          {
+            name: 'Korea South',
+            value: 'koreasouth'
+          },
+          {
+            name: 'North Central US',
+            value: 'northcentralus'
+          },
+          {
+            name: 'North Europe',
+            value: 'northeurope'
+          },
+          {
+            name: 'South Central US',
+            value: 'southcentralus'
+          },
+          {
+            name: 'South India',
+            value: 'southindia'
+          },
+          {
+            name: 'Southeast Asia',
+            value: 'southeastasia'
+          },
+          {
+            name: 'UK South',
+            value: 'uksouth'
+          },
+          {
+            name: 'UK West',
+            value: 'ukwest'
+          },
+          {
+            name: 'West Central US',
+            value: 'westcentralus'
+          },
+          {
+            name: 'West Europe',
+            value: 'westeurope'
+          },
+          {
+            name: 'West India',
+            value: 'westindia'
+          },
+          {
+            name: 'West US',
+            value: 'westus'
+          },
+          {
+            name: 'West US 2',
+            value: 'westus2'
+          }
+        ]
       }
     ];
 
