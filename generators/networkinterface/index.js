@@ -72,11 +72,8 @@ module.exports = class extends Generator {
             AzureNamingConventions.NamingConventionRule.PublicIPAddress
           );
           var namingResult = naming.validate();
-          if (input !== '' && namingResult.isValid) {
+          if (input === '' || (input !== '' && namingResult.isValid)) {
             return true;
-          }
-          if (input === '') {
-            currentGenerator.log('\n Please enter a valid string.');
           }
           if (!namingResult.isValid) {
             currentGenerator.log(
