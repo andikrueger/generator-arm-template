@@ -2,6 +2,7 @@
 
 ## Unreleased
 * List of Azure Regions added to make selection easier
+* Added input validation against Azure Naming Conventions
 
 ## 0.2.0
 
